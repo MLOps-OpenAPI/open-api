@@ -1,0 +1,882 @@
+openapi: 3.0.3
+info:
+  title: MLOps OpenAPI Specification
+  version: 0.1.0
+  description: >
+    This API provides endpoints for MLOps processes, including data intake,
+    data processing, model training, data evaluation, data card finalization,
+    and other MLOps operations.
+
+servers:
+  - url: https://api.mlops.example.com/v1
+    description: Production server
+
+paths:
+  /data-intake:
+    post:
+      summary: Data Intake
+      description: >
+        Upload raw data and associated background information to track its format,
+        contents, and lineage.
+      tags:
+        - Data Management
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                rawData:
+                  type: string
+                  format: binary
+                  description: The raw data file to upload.
+                dataIntakeForm:
+                  type: string
+                  format: binary
+                  description: Data intake form associated with the raw data.
+              required:
+                - rawData
+                - dataIntakeForm
+      responses:
+        '200':
+          description: Successful data intake.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataIntakeResponse'
+        '400':
+          description: Invalid input data.
+        '500':
+          description: Internal server error.
+
+  /data-filtering:
+    post:
+      summary: Data Filtering
+      description: >
+        Filter raw data based on specified criteria to produce filtered data.
+      tags:
+        - Data Processing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataFilteringRequest'
+      responses:
+        '200':
+          description: Data filtered successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataFilteringResponse'
+        '400':
+          description: Invalid filtering criteria.
+        '500':
+          description: Internal server error.
+
+  /data-labeling:
+    post:
+      summary: Data Labeling
+      description: >
+        Apply labels to filtered data to create a labeled dataset.
+      tags:
+        - Data Processing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataLabelingRequest'
+      responses:
+        '200':
+          description: Data labeled successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataLabelingResponse'
+        '400':
+          description: Invalid labeling information.
+        '500':
+          description: Internal server error.
+
+  /data-analysis:
+    post:
+      summary: Data Analysis
+      description: >
+        Analyze the curated dataset to generate insights and prepare for machine learning.
+      tags:
+        - Data Analysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataAnalysisRequest'
+      responses:
+        '200':
+          description: Data analysis completed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataAnalysisResponse'
+        '400':
+          description: Data analysis failed due to invalid data or parameters.
+        '500':
+          description: Internal server error.
+
+  /data-ml-ready:
+    post:
+      summary: Data ML Ready
+      description: >
+        Prepare data for machine learning by transforming and cleaning it.
+      tags:
+        - Data Processing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataMLReadyRequest'
+      responses:
+        '200':
+          description: Data prepared for machine learning successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataMLReadyResponse'
+        '400':
+          description: Data preparation failed.
+        '500':
+          description: Internal server error.
+
+  /data-test:
+    post:
+      summary: Data Testing
+      description: >
+        Test the curated dataset to ensure quality and consistency.
+      tags:
+        - Data Testing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataTestRequest'
+      responses:
+        '200':
+          description: Data testing completed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataTestResponse'
+        '400':
+          description: Data testing failed.
+        '500':
+          description: Internal server error.
+
+  /data-evaluation:
+    post:
+      summary: Data Evaluation
+      description: >
+        Evaluate the curated datasets to gain confidence in the data.
+      tags:
+        - Data Evaluation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataEvaluationRequest'
+            examples:
+              example1:
+                value:
+                  draftDataCardId: "12345"
+                  curatedDataId: "67890"
+                  metadataTransforms: {}
+                  dataTestReportId: "54321"
+                  groundTruthLabelsId: "09876"
+      responses:
+        '200':
+          description: Data evaluation completed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEvaluationResponse'
+        '400':
+          description: Data evaluation failed.
+        '500':
+          description: Internal server error.
+
+  /data-card-finalization:
+    post:
+      summary: Data Card Finalization
+      description: >
+        Finalize the data card to communicate dataset quality to customers.
+      tags:
+        - Data Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataCardFinalizationRequest'
+      responses:
+        '200':
+          description: Data card finalized successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataCardFinalizationResponse'
+        '400':
+          description: Data card finalization failed.
+        '500':
+          description: Internal server error.
+
+  /model-training:
+    post:
+      summary: Model Training
+      description: >
+        Train a machine learning model using the prepared dataset.
+      tags:
+        - Model Training
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelTrainingRequest'
+      responses:
+        '200':
+          description: Model trained successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelTrainingResponse'
+        '400':
+          description: Model training failed due to invalid data or parameters.
+        '500':
+          description: Internal server error.
+
+  /model-containerization:
+    post:
+      summary: Model Containerization
+      description: >
+        Containerize the trained model for deployment.
+      tags:
+        - Model Deployment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelContainerizationRequest'
+      responses:
+        '200':
+          description: Model containerized successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelContainerizationResponse'
+        '400':
+          description: Model containerization failed.
+        '500':
+          description: Internal server error.
+
+  /model-hardening:
+    post:
+      summary: Model Hardening
+      description: >
+        Harden the containerized model to ensure security and compliance.
+      tags:
+        - Model Deployment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelHardeningRequest'
+      responses:
+        '200':
+          description: Model hardened successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelHardeningResponse'
+        '400':
+          description: Model hardening failed.
+        '500':
+          description: Internal server error.
+
+  /risk-assessment:
+    post:
+      summary: Risk Assessment
+      description: >
+        Perform a risk assessment on the hardened model before deployment.
+      tags:
+        - Risk Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RiskAssessmentRequest'
+      responses:
+        '200':
+          description: Risk assessment completed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskAssessmentResponse'
+        '400':
+          description: Risk assessment failed.
+        '500':
+          description: Internal server error.
+
+  /model-card-creation:
+    post:
+      summary: Model Card Creation
+      description: >
+        Create a model card for the trained model to document its details.
+      tags:
+        - Documentation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelCardCreationRequest'
+      responses:
+        '200':
+          description: Model card created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelCardCreationResponse'
+        '400':
+          description: Model card creation failed.
+        '500':
+          description: Internal server error.
+
+  /model-marketplace:
+    post:
+      summary: Model Marketplace Upload
+      description: >
+        Upload the trained model to the model marketplace.
+      tags:
+        - Model Deployment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelMarketplaceRequest'
+      responses:
+        '200':
+          description: Model uploaded to marketplace successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelMarketplaceResponse'
+        '400':
+          description: Model marketplace upload failed.
+        '500':
+          description: Internal server error.
+
+  /model-downloads:
+    get:
+      summary: Model Downloads
+      description: >
+        Retrieve models available for download from the marketplace.
+      tags:
+        - Model Consumption
+      responses:
+        '200':
+          description: List of available models.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDownloadsResponse'
+        '500':
+          description: Internal server error.
+
+  /model-deployment:
+    post:
+      summary: Model Deployment
+      description: >
+        Deploy the containerized model to the production environment.
+      tags:
+        - Model Deployment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelDeploymentRequest'
+      responses:
+        '200':
+          description: Model deployed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDeploymentResponse'
+        '400':
+          description: Model deployment failed.
+        '500':
+          description: Internal server error.
+
+  /model-monitoring:
+    post:
+      summary: Model Monitoring
+      description: >
+        Monitor the deployed model for performance and drift detection.
+      tags:
+        - Model Monitoring
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelMonitoringRequest'
+      responses:
+        '200':
+          description: Model monitoring started successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelMonitoringResponse'
+        '400':
+          description: Model monitoring failed.
+        '500':
+          description: Internal server error.
+
+components:
+  schemas:
+    DataIntakeResponse:
+      type: object
+      properties:
+        rawDataId:
+          type: string
+          description: Identifier for the uploaded raw data.
+        namingStandard:
+          type: string
+          description: Naming standard applied to the data.
+        dataCardId:
+          type: string
+          description: Data card associated with the uploaded data.
+      required:
+        - rawDataId
+
+    DataFilteringRequest:
+      type: object
+      properties:
+        rawDataId:
+          type: string
+          description: Identifier of the raw data to filter.
+        filterCriteria:
+          type: object
+          additionalProperties: true
+          description: Criteria to filter the data.
+      required:
+        - rawDataId
+        - filterCriteria
+
+    DataFilteringResponse:
+      type: object
+      properties:
+        filteredDataId:
+          type: string
+          description: Identifier for the filtered data.
+      required:
+        - filteredDataId
+
+    DataLabelingRequest:
+      type: object
+      properties:
+        filteredDataId:
+          type: string
+          description: Identifier of the filtered data to label.
+        labelingInstructions:
+          type: string
+          description: Instructions for labeling the data.
+      required:
+        - filteredDataId
+        - labelingInstructions
+
+    DataLabelingResponse:
+      type: object
+      properties:
+        labeledDataId:
+          type: string
+          description: Identifier for the labeled data.
+      required:
+        - labeledDataId
+
+    DataAnalysisRequest:
+      type: object
+      properties:
+        curatedDataId:
+          type: string
+          description: Identifier of the curated data to analyze.
+        analysisParameters:
+          type: object
+          additionalProperties: true
+          description: Parameters for data analysis.
+      required:
+        - curatedDataId
+
+    DataAnalysisResponse:
+      type: object
+      properties:
+        analysisReportId:
+          type: string
+          description: Identifier for the data analysis report.
+      required:
+        - analysisReportId
+
+    DataMLReadyRequest:
+      type: object
+      properties:
+        curatedDataId:
+          type: string
+          description: Identifier of the curated data to prepare for ML.
+        transformationParameters:
+          type: object
+          additionalProperties: true
+          description: Parameters for data transformation.
+      required:
+        - curatedDataId
+
+    DataMLReadyResponse:
+      type: object
+      properties:
+        mlReadyDataId:
+          type: string
+          description: Identifier for the ML-ready data.
+      required:
+        - mlReadyDataId
+
+    DataTestRequest:
+      type: object
+      properties:
+        curatedDataId:
+          type: string
+          description: Identifier of the curated data to test.
+        testParameters:
+          type: object
+          additionalProperties: true
+          description: Parameters for data testing.
+      required:
+        - curatedDataId
+
+    DataTestResponse:
+      type: object
+      properties:
+        testReportId:
+          type: string
+          description: Identifier for the data test report.
+      required:
+        - testReportId
+
+    DataEvaluationRequest:
+      type: object
+      properties:
+        draftDataCardId:
+          type: string
+          description: Identifier of the draft data card.
+        curatedDataId:
+          type: string
+          description: Identifier of the curated data.
+        metadataTransforms:
+          type: object
+          additionalProperties: true
+          description: Metadata for transforms.
+        dataTestReportId:
+          type: string
+          description: Identifier of the data test report.
+        groundTruthLabelsId:
+          type: string
+          description: Identifier of the ground truth labels (optional).
+      required:
+        - draftDataCardId
+        - curatedDataId
+        - metadataTransforms
+        - dataTestReportId
+
+    DataEvaluationResponse:
+      type: object
+      properties:
+        dataEvaluationReportId:
+          type: string
+          description: Identifier for the data evaluation report.
+      required:
+        - dataEvaluationReportId
+
+    DataCardFinalizationRequest:
+      type: object
+      properties:
+        draftDataCardId:
+          type: string
+          description: Identifier of the draft data card.
+        dataCurationDescription:
+          type: string
+          description: Description of the data curation process.
+        dataEvaluationReportId:
+          type: string
+          description: Identifier of the data evaluation report.
+        dataHandlingGuidance:
+          type: string
+          description: Data handling guidance (optional).
+      required:
+        - draftDataCardId
+        - dataCurationDescription
+        - dataEvaluationReportId
+
+    DataCardFinalizationResponse:
+      type: object
+      properties:
+        finalDataCardId:
+          type: string
+          description: Identifier for the finalized data card.
+      required:
+        - finalDataCardId
+
+    ModelTrainingRequest:
+      type: object
+      properties:
+        mlReadyDataId:
+          type: string
+          description: Identifier of the ML-ready data for training.
+        hyperparameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: ML algorithm hyperparameters in JSON format.
+      required:
+        - mlReadyDataId
+        - hyperparameters
+
+    ModelTrainingResponse:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Identifier for the trained model.
+        modelWeightsLocation:
+          type: string
+          description: Location of the model weights file.
+      required:
+        - modelId
+        - modelWeightsLocation
+
+    ModelContainerizationRequest:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Identifier of the model to containerize.
+        containerizationParameters:
+          type: object
+          additionalProperties: true
+          description: Parameters for model containerization.
+      required:
+        - modelId
+
+    ModelContainerizationResponse:
+      type: object
+      properties:
+        containerImageId:
+          type: string
+          description: Identifier for the containerized model image.
+      required:
+        - containerImageId
+
+    ModelHardeningRequest:
+      type: object
+      properties:
+        containerImageId:
+          type: string
+          description: Identifier of the containerized model to harden.
+        hardeningParameters:
+          type: object
+          additionalProperties: true
+          description: Parameters for model hardening.
+      required:
+        - containerImageId
+
+    ModelHardeningResponse:
+      type: object
+      properties:
+        hardenedContainerImageId:
+          type: string
+          description: Identifier for the hardened container image.
+      required:
+        - hardenedContainerImageId
+
+    RiskAssessmentRequest:
+      type: object
+      properties:
+        hardenedContainerImageId:
+          type: string
+          description: Identifier of the hardened container image to assess.
+        riskAssessmentFramework:
+          type: string
+          description: Framework to use for risk assessment (e.g., NIST).
+      required:
+        - hardenedContainerImageId
+        - riskAssessmentFramework
+
+    RiskAssessmentResponse:
+      type: object
+      properties:
+        riskAssessmentReportId:
+          type: string
+          description: Identifier for the risk assessment report.
+      required:
+        - riskAssessmentReportId
+
+    ModelCardCreationRequest:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Identifier of the trained model.
+        modelDetails:
+          type: object
+          additionalProperties: true
+          description: Details about the model for the model card.
+      required:
+        - modelId
+        - modelDetails
+
+    ModelCardCreationResponse:
+      type: object
+      properties:
+        modelCardId:
+          type: string
+          description: Identifier for the created model card.
+      required:
+        - modelCardId
+
+    ModelMarketplaceRequest:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Identifier of the model to upload.
+        marketplaces:
+          type: array
+          items:
+            type: string
+          description: List of marketplaces to upload the model to.
+      required:
+        - modelId
+
+    ModelMarketplaceResponse:
+      type: object
+      properties:
+        marketplaceUploadStatus:
+          type: object
+          additionalProperties: true
+          description: Status of the model upload to marketplaces.
+      required:
+        - marketplaceUploadStatus
+
+    ModelDownloadsResponse:
+      type: object
+      properties:
+        availableModels:
+          type: array
+          items:
+            type: object
+            properties:
+              modelId:
+                type: string
+              modelName:
+                type: string
+              description:
+                type: string
+      required:
+        - availableModels
+
+    ModelDeploymentRequest:
+      type: object
+      properties:
+        containerImageId:
+          type: string
+          description: Identifier of the containerized model to deploy.
+        deploymentParameters:
+          type: object
+          additionalProperties: true
+          description: Parameters for model deployment.
+      required:
+        - containerImageId
+
+    ModelDeploymentResponse:
+      type: object
+      properties:
+        deploymentId:
+          type: string
+          description: Identifier for the model deployment.
+        endpointUrl:
+          type: string
+          format: uri
+          description: URL of the deployed model endpoint.
+      required:
+        - deploymentId
+        - endpointUrl
+
+    ModelMonitoringRequest:
+      type: object
+      properties:
+        deploymentId:
+          type: string
+          description: Identifier of the deployed model to monitor.
+        monitoringParameters:
+          type: object
+          additionalProperties: true
+          description: Parameters for model monitoring.
+      required:
+        - deploymentId
+
+    ModelMonitoringResponse:
+      type: object
+      properties:
+        monitoringJobId:
+          type: string
+          description: Identifier for the model monitoring job.
+      required:
+        - monitoringJobId
+
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+security:
+  - apiKeyAuth: []
+
+tags:
+  - name: Data Management
+    description: Operations related to data intake and management.
+  - name: Data Processing
+    description: Operations for processing data, including filtering and labeling.
+  - name: Data Analysis
+    description: Operations for analyzing curated data.
+  - name: Data Testing
+    description: Operations for testing data.
+  - name: Data Evaluation
+    description: Operations for evaluating data quality.
+  - name: Model Training
+    description: Operations for training machine learning models.
+  - name: Model Deployment
+    description: Operations for containerizing and deploying models.
+  - name: Risk Management
+    description: Operations for assessing risks associated with models.
+  - name: Documentation
+    description: Operations related to creating documentation like model cards.
+  - name: Model Consumption
+    description: Operations for consuming models from the marketplace.
+  - name: Model Monitoring
+    description: Operations for monitoring deployed models.
