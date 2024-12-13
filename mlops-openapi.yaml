@@ -19,7 +19,7 @@ paths:
         Upload raw data and associated background information to track its format,
         contents, and lineage.
       tags:
-        - Data Management
+        - Data Ingestion
       requestBody:
         required: true
         content:
@@ -106,7 +106,7 @@ paths:
       description: >
         Analyze the curated dataset to generate insights and prepare for machine learning.
       tags:
-        - Data Analysis
+        - Exploratory Data Analysis (EDA)
       requestBody:
         required: true
         content:
@@ -127,11 +127,11 @@ paths:
 
   /data-ml-ready:
     post:
-      summary: Data ML Ready
+      summary: Data Transformation
       description: >
         Prepare data for machine learning by transforming and cleaning it.
       tags:
-        - Data Processing
+        - Data Preparation
       requestBody:
         required: true
         content:
@@ -156,7 +156,7 @@ paths:
       description: >
         Test the curated dataset to ensure quality and consistency.
       tags:
-        - Data Testing
+        - Data Validation
       requestBody:
         required: true
         content:
@@ -181,7 +181,7 @@ paths:
       description: >
         Evaluate the curated datasets to gain confidence in the data.
       tags:
-        - Data Evaluation
+        - Data Validation
       requestBody:
         required: true
         content:
@@ -214,7 +214,7 @@ paths:
       description: >
         Finalize the data card to communicate dataset quality to customers.
       tags:
-        - Data Management
+        - Metadata Documentation
       requestBody:
         required: true
         content:
@@ -314,7 +314,7 @@ paths:
       description: >
         Perform a risk assessment on the hardened model before deployment.
       tags:
-        - Risk Management
+        - Model Deployment
       requestBody:
         required: true
         content:
@@ -364,7 +364,7 @@ paths:
       description: >
         Upload the trained model to the model marketplace.
       tags:
-        - Model Deployment
+        - Model Serving and Monitoring 
       requestBody:
         required: true
         content:
@@ -389,7 +389,7 @@ paths:
       description: >
         Retrieve models available for download from the marketplace.
       tags:
-        - Model Consumption
+        - Model Serving and Monitoring 
       responses:
         '200':
           description: List of available models.
@@ -406,7 +406,7 @@ paths:
       description: >
         Deploy the containerized model to the production environment.
       tags:
-        - Model Deployment
+        - Model Serving and Monitoring
       requestBody:
         required: true
         content:
@@ -431,7 +431,7 @@ paths:
       description: >
         Monitor the deployed model for performance and drift detection.
       tags:
-        - Model Monitoring
+        - Model Serving and Monitoring 
       requestBody:
         required: true
         content:
@@ -858,25 +858,43 @@ security:
   - apiKeyAuth: []
 
 tags:
-  - name: Data Management
-    description: Operations related to data intake and management.
+  - name: Data Ingestion
+    description: >
+      Processes related to acquiring and importing data.
+      **Primary Personas:** Data Engineers, Platform Engineers
   - name: Data Processing
-    description: Operations for processing data, including filtering and labeling.
-  - name: Data Analysis
-    description: Operations for analyzing curated data.
-  - name: Data Testing
-    description: Operations for testing data.
-  - name: Data Evaluation
-    description: Operations for evaluating data quality.
+    description: >
+      Activities involving data filtering, labeling, and feature engineering to prepare data for analysis and modeling.
+      **Primary Personas:** Data Engineers, Data Scientists, ML Engineers
+  - name: Exploratory Data Analysis (EDA)
+    description: >
+      Analyzing data to derive meaningful insights and support decision-making processes.
+      **Primary Personas:** Data Scientists, Data Engineers
+  - name: Data Preparation
+    description: >
+      Transforming and refining data to make it suitable for machine learning applications.
+      **Primary Personas:** Data Engineers, Data Scientists
+  - name: Data Validation
+    description: >
+      Testing and evaluating data quality to ensure accuracy and reliability for modeling.
+      **Primary Personas:** Data Scientists, Quality Assurance (QA) Engineers, Data Engineers
+  - name: Metadata Documentation
+    description: >
+      Finalizing and documenting metadata, including data cards, to provide comprehensive information about datasets.
+      **Primary Personas:** Data Engineers, Product Managers, Business & Strategy Leaders
   - name: Model Training
-    description: Operations for training machine learning models.
+    description: >
+      Training machine learning models using prepared and validated data to develop predictive capabilities.
+      **Primary Personas:** ML Engineers, Data Scientists
   - name: Model Deployment
-    description: Operations for containerizing and deploying models.
-  - name: Risk Management
-    description: Operations for assessing risks associated with models.
+    description: >
+      Deploying trained models into production environments, including testing, evaluation, containerization, security scanning, and risk assessment.
+      **Primary Personas:** ML Engineers, Platform Engineers, Security & Compliance Officers, IT Operations
   - name: Documentation
-    description: Operations related to creating documentation like model cards.
-  - name: Model Consumption
-    description: Operations for consuming models from the marketplace.
-  - name: Model Monitoring
-    description: Operations for monitoring deployed models.
+    description: >
+      Creating and maintaining comprehensive documentation for models, such as model cards, to ensure transparency and facilitate understanding.
+      **Primary Personas:** AI Engineers / Intelligent App Developers, Product Managers, Data Scientists
+  - name: Model Serving and Monitoring
+    description: >
+      Managing the distribution and integration of models through marketplaces and downloads, as well as ongoing monitoring to ensure performance and reliability.
+      **Primary Personas:** AI Engineers / Intelligent App Developers, Data Scientists, ML Engineers, Quality Assurance (QA) Engineers, IT Operations
