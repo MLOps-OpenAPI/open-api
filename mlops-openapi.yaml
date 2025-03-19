@@ -16,35 +16,56 @@ paths:
     post:
       summary: Data Intake
       description: >
-        Upload raw data and associated background information to track its format,
-        contents, and lineage.
+        Creates a new data card, or updates one if it exsists
       tags:
         - Data Ingestion
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
               properties:
-                rawData:
+                DataCard:
                   type: string
-                  format: binary
-                  description: The raw data file to upload.
-                dataIntakeForm:
+                  example: "test3"
+                Bucket:
                   type: string
-                  format: binary
-                  description: Data intake form associated with the raw data.
+                  example: "anthony-test-bucket"
+                S3Url:
+                  type: string
+                  format: uri
+                  example: "https://minio-api-minio.apps.cluster-497z4.497z4.sandbox2736.opentlc.com"
+                AccessKey:
+                  type: string
+                SecretKey:
+                  type: string
+                path:
+                  type: string
+                  example: "/test_folder"
+                  default: "/"
               required:
-                - rawData
-                - dataIntakeForm
+                - DataCard
+                - Bucket
+                - S3Url
+                - AccessKey
+                - SecretKey
       responses:
-        '200':
+        "200":
           description: Successful data intake.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DataIntakeResponse'
+                type: object
+                properties:
+                  eventListener:
+                    type: string
+                  namespace:
+                    type: string
+                  eventListenerUID:
+                    type: string
+                  eventID:
+                    type: string
         '400':
           description: Invalid input data.
         '500':
