@@ -70,6 +70,152 @@ paths:
           description: Invalid input data.
         '500':
           description: Internal server error.
+  /data-card:
+    get:
+      summary: Retrieves an existing data-card
+      description: >
+        Retrieves an existing data card
+      tags:
+        - Data Ingestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                DataCard:
+                  type: string
+                  example: "example-data-card"
+                Bucket:
+                  type: string
+                  example: "anthony-test-bucket"
+                S3Url:
+                  type: string
+                  format: uri
+                  example: "https://minio-api-minio.apps.cluster-497z4.497z4.sandbox2736.opentlc.com"
+                AccessKey:
+                  type: string
+                SecretKey:
+                  type: string
+                path:
+                  type: string
+                  example: "/test_folder"
+                  default: "/"
+              required:
+                - DataCard
+                - Bucket
+                - S3Url
+                - AccessKey
+                - SecretKey
+      responses:
+        "200":
+          description: Successful data intake.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  DataCard:
+                    type: string
+                    example: "example-data-card"
+                  Bucket:
+                    type: string
+                    example: "anthony-test-bucket"
+                  S3Url:
+                    type: string
+                    format: uri
+                    example: "https://minio-api-minio.apps.cluster-497z4.497z4.sandbox2736.opentlc.com"
+                  AccessKey:
+                    type: string
+                  SecretKey:
+                    type: string
+                  path:
+                    type: string
+                    example: "/test_folder"
+                    default: "/"
+        '400':
+          description: Invalid input data.
+        '500':
+          description: Internal server error.
+
+  /request-model-card:
+    post:
+      summary: creates a request for a model card.
+      description: >
+        this creates a request to have a model card created based on certain parameters 
+        including the desired algorithm and type of model
+      tags:
+        - Data Ingestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dataSetType:
+                  type: string
+                  example: "images"
+                DataCard:
+                  type: string
+                metadata:
+                  type: object   
+              required:
+                - dataSetType
+      responses:
+        "200":
+          description: Successful data intake.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelCardCreationRequestId:
+                    type: string
+
+        '400':
+          description: Invalid input data.
+        '500':
+          description: Internal server error.
+
+  /push-trained-model-to-model-card:
+    post:
+      summary: creates a request for a model card.
+      description: >
+        this is for the model trainers to push the model to the modelcard after it has already been trained
+        on a given dataset.
+      tags:
+        - Data Ingestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dataSetType:
+                  type: string
+                  example: "images"
+                metadata:
+                  type: object   
+              required:
+                - dataSetType
+      responses:
+        "200":
+          description: Successful data intake.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelCardCreationRequestId:
+                    type: string
+
+        '400':
+          description: Invalid input data.
+        '500':
+          description: Internal server error.
 
   /data-filtering:
     post:
