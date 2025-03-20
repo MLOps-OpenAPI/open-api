@@ -139,6 +139,66 @@ paths:
         '500':
           description: Internal server error.
 
+  /promote-data-card-to-gold:
+      put:
+        summary: promote a data card to gold
+        description: >
+          Once a given data card is deemed of golden quality, verifies the hash and promotes to gold.
+          This allows the model card request to be created
+        tags:
+          - Data Ingestion
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  DataCard:
+                    type: string
+                    example: "test3"
+                  Bucket:
+                    type: string
+                    example: "anthony-test-bucket"
+                  S3Url:
+                    type: string
+                    format: uri
+                    example: "https://minio-api-minio.apps.cluster-497z4.497z4.sandbox2736.opentlc.com"
+                  AccessKey:
+                    type: string
+                  SecretKey:
+                    type: string
+                  path:
+                    type: string
+                    example: "/test_folder"
+                    default: "/"
+                required:
+                  - DataCard
+                  - Bucket
+                  - S3Url
+                  - AccessKey
+                  - SecretKey
+        responses:
+          "200":
+            description: Successful data intake.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    eventListener:
+                      type: string
+                    namespace:
+                      type: string
+                    eventListenerUID:
+                      type: string
+                    eventID:
+                      type: string
+          '400':
+            description: Invalid input data.
+          '500':
+            description: Internal server error.
+
   /request-model-card:
     post:
       summary: creates a request for a model card.
@@ -194,9 +254,13 @@ paths:
             schema:
               type: object
               properties:
-                dataSetType:
+                modelType:
                   type: string
-                  example: "images"
+                  example: yolo8
+                modelFamily:
+                  type: string
+                purpose:
+                  type: string
                 metadata:
                   type: object   
               required:
@@ -209,7 +273,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  modelCardCreationRequestId:
+                  modelCardId:
+                    type: string
+                  bucketName:
                     type: string
 
         '400':
