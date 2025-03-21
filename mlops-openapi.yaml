@@ -18,7 +18,7 @@ paths:
       description: >
         Creates a new data card, or updates one if it exsists
       tags:
-        - Data Ingestion
+        - Arl Incubator
       requestBody:
         required: true
         content:
@@ -70,13 +70,14 @@ paths:
           description: Invalid input data.
         '500':
           description: Internal server error.
+
   /data-card:
     get:
       summary: Retrieves an existing data-card
       description: >
         Retrieves an existing data card
       tags:
-        - Data Ingestion
+        - Arl Incubator
       requestBody:
         required: true
         content:
@@ -139,14 +140,14 @@ paths:
         '500':
           description: Internal server error.
 
-  /promote-data-card-to-gold:
+  /promote-data-card:
       put:
         summary: promote a data card to gold
         description: >
           Once a given data card is deemed of golden quality, verifies the hash and promotes to gold.
           This allows the model card request to be created
         tags:
-          - Data Ingestion
+          - Arl Incubator
         requestBody:
           required: true
           content:
@@ -186,14 +187,30 @@ paths:
                 schema:
                   type: object
                   properties:
-                    eventListener:
+                    DataCard:
                       type: string
-                    namespace:
+                      example: "test3"
+                    Bucket:
                       type: string
-                    eventListenerUID:
+                      example: "anthony-test-bucket"
+                    S3Url:
                       type: string
-                    eventID:
+                      format: uri
+                      example: "https://minio-api-minio.apps.cluster-497z4.497z4.sandbox2736.opentlc.com"
+                    AccessKey:
                       type: string
+                    SecretKey:
+                      type: string
+                    Path:
+                      type: string
+                      example: "/test_folder"
+                      default: "/"
+                    Hash:
+                      type: string
+                      example: "5f4dcc3b5aa765d61d8327deb882cf99"
+                    Golden:
+                      type: boolean
+                      example: true
           '400':
             description: Invalid input data.
           '500':
@@ -206,7 +223,7 @@ paths:
         this creates a request to have a model card created based on certain parameters 
         including the desired algorithm and type of model
       tags:
-        - Data Ingestion
+        - Arl Incubator
       requestBody:
         required: true
         content:
@@ -246,7 +263,7 @@ paths:
         this is for the model trainers to push the model to the modelcard after it has already been trained
         on a given dataset.
       tags:
-        - Data Ingestion
+        - Arl Incubator
       requestBody:
         required: true
         content:
