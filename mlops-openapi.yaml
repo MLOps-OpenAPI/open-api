@@ -1108,6 +1108,9 @@ security:
   - apiKeyAuth: []
 
 tags:
+  - name: Arl Incubator
+    description: >
+      Any endpoints created during the ARL Incubator
   - name: Data Ingestion
     description: >
       Processes related to acquiring and importing data.
