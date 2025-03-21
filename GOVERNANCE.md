@@ -93,7 +93,7 @@ When consensus cannot be reached:
 
 This governance document is a living artifact and may evolve as the project matures.
 
-- Changes to governance require a majority vote among maintainers.
+- Changes to governance require a majority vote among maintainers. (See _Voting_ above for specifics).
 - A changelog will be maintained in this file with timestamps.
 
 ---
