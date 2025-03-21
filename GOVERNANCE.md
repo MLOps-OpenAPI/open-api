@@ -12,8 +12,8 @@ Maintainers are responsible for the project's overall health, technical directio
 
 **Initial Maintainers:**
 
-- [Brandon Corfman] (@bcorfman) – [Project Linchpin]
-- [Hunter Gerlach] (@HunterGerlach) – [Red Hat]
+- [Brandon Corfman](https://github.com/bcorfman) – [Project Linchpin](https://peoiews.army.mil/pm-isa/)
+- [Hunter Gerlach](https://github.com/HunterGerlach) – [Red Hat](https://www.redhat.com)
 
 To ensure neutrality and resilience, maintainers must represent at least two different organizations.
 
@@ -98,4 +98,4 @@ This governance document is a living artifact and may evolve as the project matu
 
 ---
 
-_Last updated: [2025-03-20]_
+_Last updated: [2025-03-21]_
